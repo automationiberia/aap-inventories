@@ -1,0 +1,265 @@
+# Automation Controller Nodes
+# There are two valid node_types that can be assigned for this group.
+# A node_type=control implies that the node will only be able to run
+# project and inventory updates, but not regular jobs.
+# A node_type=hybrid will have the ability to run everything.
+# If you do not define the node_type, it defaults to hybrid.
+#
+# control.example node_type=control
+# hybrid.example  node_type=hybrid
+# hybrid2.example <- this will default to hybrid
+[automationcontroller]
+demo-ctr1-prd.bcnconsulting.com node_type=hybrid ansible_connection=local
+
+[automationcontroller:vars]
+peers=execution_nodes
+
+# Execution Nodes
+# There are two valid node_types that can be assigned for this group.
+# A node_type=hop implies that the node will forward jobs to an execution node.
+# A node_type=execution implies that the node will be able to run jobs.
+# If you do not define the node_type, it defaults to execution.
+#
+# hop.example        node_type=hop
+# execution.example  node_type=execution
+# execution2.example <- this will default to execution
+[execution_nodes]
+
+[automationhub]
+demo-hub1-prd.bcnconsulting.com
+
+[automationcatalog]
+
+[database]
+demo-db-prd.bcnconsulting.com
+
+# Single Sign-On
+# If sso_redirect_host is set, that will be used for application to connect to
+# SSO for authentication. This must be reachable from client machines.
+#
+# ssohost.example sso_redirect_host=<host/ip>
+[sso]
+
+[all:vars]
+admin_password='redhat00'
+
+minimum_ansible_version='2.11'
+upgrade_ansible_with_tower=1
+ansible_ssh_password=redhat00
+ansible_become=true
+ansible_sudo=true
+ansible_become_pass=redhat00
+ansible_ssh_user=ansible
+
+tower_package_name='automation-controller'
+tower_package_version='4.2.0'
+automationhub_package_name='automation-hub'
+automationhub_package_version='4.5'
+automation_platform_version='2.2'
+automation_platform_channel='ansible-automation-platform-2.2-for-rhel-8-x86_64-rpms'
+
+pg_host='demo-db-prd.bcnconsulting.com'
+pg_port=5432
+
+pg_database='awx'
+pg_username='awx'
+pg_password='redhat00'
+pg_sslmode='prefer'  # set to 'verify-full' for client-side enforced SSL
+
+# Execution Environment Configuration
+# Credentials for container registry to pull execution environment images from,
+# registry_username and registry_password are required for registry.redhat.io
+registry_url='registry.redhat.io'
+registry_username='1979710|testaap'
+registry_password='eyJhbGciOiJSUzUxMiJ9.eyJzdWIiOiIyMmI3NzcxMDhhZWY0YTk0OTc2ODEzMjVmOGZlNTgzYSJ9.BawP_Bi-F0O3cQZ2vH9nArcOL6XncSR4YGBooebZR3ufR1QDVUD2oOE-ecF1TW8gh_MlPwG-8vEa41BWnQyiYSQCue8D6dWxGzxhi6yMJMJjwxIFw-1aS3S9L-4vouAalUWRM0JBqr4YenWTrIaPRkj1jgnycLNp9E8b2C8siQTqMqOIQvGmVmJLQlXAsTkxEAsA5Y79DA_i5y8KRRW2bjP4RR0knDiOJ0OKZBfZ5Ixcr0ebHLXZJBIdUDkjCBVxGHqQk9Y8XoAl2ECoOJAQEueEH0EeDR18TmtKlXIA9iaqyQYxmTAfgg_ES58Ux4UBLmXJBb91W1YAPh_wO_vyKvM9plEYHDV4PUrngTBbYIbruCg00h723gwJfO2YfAaJ6QvNv6Yp8Vcje_L3MFW9MSt9RmLhh5Z1mLoO1q3lGL9TTofR58H8gWrg_xp3Cq52P5YE2J8LI4KZleBlQ8Fr8ulyvo1eheCTwpmsRmOxZLyUZpvH5XbOrI55GLm2wI31-3cH0efOf3ZL2OloaVl059A9ZjZ3bPaBZGB5vUGLlGJCQHca_RObGRVSEuTfjDa0QcREJKGO-Fn1u01hLue6JnWKftJOsqoVNfZwzIQaLm5j-qTETL9_laFipKFDPoUhR2X4D3vLviNuakQVP1WCxfbwHJGr9283Z4TDVODDX8s'
+
+# Receptor Configuration
+#
+receptor_listener_port=27199
+
+# Automation Hub Configuration
+#
+
+automationhub_admin_password='redhat00'
+
+automationhub_pg_host='demo-db-prd.bcnconsulting.com'
+automationhub_pg_port=5432
+
+automationhub_pg_database='automationhub'
+automationhub_pg_username='automationhub'
+automationhub_pg_password='redhat00'
+automationhub_pg_sslmode='prefer'
+
+# When using Single Sign-On, specify the main automation hub URL that
+# clients will connect to (e.g. https://<load balancer host>).
+# If not specified, the first node in the [automationhub] group will be used.
+#
+# automationhub_main_url = ''
+
+# By default if the automation hub package and its dependencies
+# are installed they won't get upgraded when running the installer
+# even if newer packages are available. One needs to run the ./setup.sh
+# script with the following set to True.
+#
+automationhub_upgrade = True
+
+# By default when one uploads collections to Automation Hub
+# an admin needs to approve it before it is made available
+# to the users. If one wants to disable the content approval
+# flow, the following setting should be set to False.
+#
+automationhub_require_content_approval = True
+
+# At import time collections can go through a series of checks.
+# Behaviour is driven by galaxy-importer.cfg configuration.
+# Example are ansible-doc, ansible-lint, flake8, ...
+#
+# The following parameter allow one to drive this configuration.
+# This variable is expected to be a dictionary.
+#
+# automationhub_importer_settings = None
+
+# The default install will deploy a TLS enabled Automation Hub.
+# If for some reason this is not the behavior wanted one can
+# disable TLS enabled deployment.
+#
+# automationhub_disable_https = False
+
+# The default install will deploy a TLS enabled Automation Hub.
+# Unless specified otherwise the HSTS web-security policy mechanism
+# will be enabled. This setting allows one to disable it if need be.
+#
+# automationhub_disable_hsts = False
+
+# The default install will not create a signing service by default. If set to true
+# a signing service will be created.
+
+#automationhub_create_default_collection_signing_service = True
+
+# If a collection signing service is enabled, one must provide the following two variables
+# to ensure collections can be properly signed. Note: those MUST be absolute paths
+
+#automationhub_collection_signing_service_key = /root/galaxy_signing_service.gpg
+#automationhub_collection_signing_service_script =  /home/ansible/signing.sh
+
+# If a collectiion signing service is enabled, collections won't be signed automatically by default
+# the following parameter will have them signed by default
+#
+automationhub_auto_sign_collections = False
+
+# Automation Services Catalog Configuration
+#
+
+# automationcatalog_pg_host='demo-db-prd.bcnconsulting.com'
+# automationcatalog_pg_port=5432
+#
+# automationcatalog_pg_database='automationservicescatalog'
+# automationcatalog_pg_username='automationservicescatalog'
+# automationcatalog_pg_password='redhat00'
+
+# For an alternative front end url needed for SSO configuration with Automation
+# Services Catalog, provide the URL.
+
+# automationcatalog_main_url=''
+
+# Automation Services Catalog requires either Controller to be installed
+# with Automation Controller or a URL to an active and routable Controller
+# server must be provided with the below variable.
+
+# automation_controller_main_url=''
+
+# Automation Services Catalog requires SSO and SSO admin credentials for
+# authentication. SSO admin credentials are also required for set Catalog specific
+# roles needed for the application. If SSO is not provided in inventory for
+# configuration, then the SSO host needs to be defined with the below.
+
+# sso_host=''
+
+# Automation Services Catalog will generate a token, but a specific OAuth token
+# can be provided with the following. Note that the variable
+# "automation_controller_main_url" must be assigned a routable address from
+# the Automation Service Catalog host.
+
+# automationcatalog_controller_token=''
+
+# Automation Controller credentials can also be provided to generate a token
+# for a working Controller environment. Note that the variable
+# "automation_controller_main_url" must be assigned a routable address from
+# the Automation Service Catalog host. Generating a token will also create
+# an application in Automation Controller for stateful management of the token.
+
+# automationcatalog_controller_username=''
+# automationcatalog_controller_password=''
+
+# The default install will enable analytics collection for Services Catalog.
+# Set to False to disable.
+
+# automationcatalog_enable_analytics_collection = True
+
+# The default install will use RHSM certificate to send Services Catalog analytics
+# collection data. To use username and password instead, provide the
+# console.redhat.com credentials.
+
+# insights_username=''
+# insights_password=''
+
+# If connection to Automation Controller requires SSL validation to be off,
+# provide the variable below. By default, the value is true.
+#
+# automationcatalog_controller_verify_ssl=False
+
+# The default install will deploy a TLS enabled Automation Hub.
+# If for some reason this is not the behavior wanted one can
+# disable TLS enabled deployment.
+#
+# automationcatalog_disable_https = False
+
+# The default install will deploy a TLS enabled Automation Hub.
+# Unless specified otherwise the HSTS web-security policy mechanism
+# will be enabled. This setting allows one to disable it if need be.
+#
+# automationcatalog_disable_hsts = False
+
+# SSL-related variables
+#
+automationhub_ssl_validate_certs = False
+
+custom_ca_cert=/home/ansible/prerequistes/ca/intermediateCA/certs/ca-chain.pem
+web_server_ssl_cert=/home/ansible/prerequistes/ca/endEntity/certs/demo-ctr1-prd.pem
+web_server_ssl_key=/home/ansible/prerequistes/ca/endEntity/private/demo-ctr1-prd.key
+automationhub_ssl_cert=/home/ansible/prerequistes/ca/endEntity/certs/demo-hub1-prd.pem
+automationhub_ssl_key=/home/ansible/prerequistes/ca/endEntity/private/demo-hub1-prd.key
+postgres_use_ssl=True
+postgres_ssl_cert=/home/ansible/prerequistes/ca/endEntity/certs/demo-db-prd.pem
+postgres_ssl_key=/home/ansible/prerequistes/ca/endEntity/private/demo-db-prd.key
+# sso_console_admin_password='redhat00'
+
+# If set, this will install a custom CA certificate to the system trust store.
+# custom_ca_cert=/path/to/ca.crt
+
+# Certificate and key to install in nginx for the web UI and API
+# web_server_ssl_cert=/path/to/tower.cert
+# web_server_ssl_key=/path/to/tower.key
+
+# Certificate and key to install in Automation Hub node
+# automationhub_ssl_cert=/path/to/automationhub.cert
+# automationhub_ssl_key=/path/to/automationhub.key
+
+# Server-side SSL settings for PostgreSQL (when we are installing it).
+# postgres_use_ssl=False
+# postgres_ssl_cert=/path/to/pgsql.crt
+# postgres_ssl_key=/path/to/pgsql.key
+
+# Keystore file to install in SSO node
+# sso_custom_keystore_file='/path/to/sso.jks'
+
+# The default install will deploy SSO with sso_use_https=True
+# Keystore password is required for https enabled SSO
+# sso_keystore_password='redhat00'
+
+# Single-Sign-On configuration
+# sso_console_admin_password='redhat00'
+
+# The default install will register node to the Red Hat Insights Service
+# if the node is registered with Subscription Manager. Set to False to disable.
+# enable_insights_collection = True
